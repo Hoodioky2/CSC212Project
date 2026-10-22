@@ -18,6 +18,9 @@ public class RiderList implements IRiderList {
 		riders.findFirst();
 		IRider tmp;
 		while (true) {
+			
+			if(rider.compareTo(riders.retrieve()) ==0)
+				return false;
 
 			if (rider.compareTo(riders.retrieve())< 0) {
 				tmp = riders.retrieve();
@@ -63,10 +66,11 @@ public class RiderList implements IRiderList {
 	
 	@Override
 	public LinkedList<IRider> findByName(String fullName){
-		if(riders.empty())
-			return null;
-		
 		LinkedList<IRider> res = new LinkedList<IRider>();
+		
+		if(riders.empty())
+			return res;
+		
 		riders.findFirst();
 		while(!riders.last()) {
 			if(riders.retrieve().getName().equals(fullName))
@@ -76,8 +80,6 @@ public class RiderList implements IRiderList {
 		if(riders.retrieve().getName().equals(fullName))
 			res.insert(riders.retrieve());
 		
-		if(res.empty())
-			return null;
 		return res;
 	}
 	
@@ -104,9 +106,11 @@ public class RiderList implements IRiderList {
 	
 	@Override
 	public LinkedList<IRider> findByHomeCity(String homeCity){
-		if(riders.empty())
-			return null;
 		LinkedList<IRider> res = new LinkedList<IRider>();
+		
+		if(riders.empty())
+			return res;
+		
 		riders.findFirst();
 		while(!riders.last()) {
 			if(riders.retrieve().getHomeCity().equals(homeCity))
@@ -117,8 +121,6 @@ public class RiderList implements IRiderList {
 		if(riders.retrieve().getHomeCity().equals(homeCity))
 			res.insert(riders.retrieve());
 		
-		if(res.empty())
-			return null;
 		return res;
 		}
 	
