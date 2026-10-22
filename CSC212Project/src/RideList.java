@@ -20,6 +20,10 @@ public class RideList implements IRideList {
 
 		rides.findFirst();
 		while (true) {
+			
+			if(ride.compareTo(rides.retrieve()) ==0) {
+				return false;
+			}
 			if (ride.compareTo(rides.retrieve()) < 0) {
 				IRide tmp = rides.retrieve();
 				rides.update(ride);
@@ -91,6 +95,7 @@ public class RideList implements IRideList {
 	public LinkedList<IRide> findByRiderName(String riderFullName){
 		LinkedList<IRide> res = new LinkedList<IRide>();
 		if(rides.empty()) {
+
 			return res;
 		}
 		
