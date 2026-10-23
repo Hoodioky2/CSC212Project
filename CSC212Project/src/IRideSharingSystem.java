@@ -78,7 +78,8 @@ public interface IRideSharingSystem {
      * - The ride must not conflict with the driver's current schedule.
      * It returns true if scheduled; false otherwise
      */
-    boolean schedulePrivateRide(String pickupLocation, IDateTime pickupTime, IDateTime dropoffTime, String dropoffLocation, int riderId, int driverId);
+    boolean schedulePrivateRide(String pickupLocation, IDateTime pickupTime, IDateTime dropoffTime,
+			String dropoffLocation, int riderId, int driverId);
 
     /**
      * Schedules a shared ride for multiple riders with one driver.
