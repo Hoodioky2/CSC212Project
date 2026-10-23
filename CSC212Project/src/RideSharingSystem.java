@@ -241,7 +241,9 @@ public class RideSharingSystem implements IRideSharingSystem {
 	
 	private void removeRideFromDriverHistory(IRide ride, IDriver driver) {
 		
-		
+		if(driver.getRideHistory().empty()) {
+			return;
+		}
 		driver.getRideHistory().findFirst();
 		
 		while(true) {
