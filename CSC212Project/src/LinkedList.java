@@ -30,8 +30,11 @@ public class LinkedList<T> {
 	
 	
 	public void insert(T data) {
-		if(empty())
+		if(empty()) {
 			current = head = new Node<T>(data);
+			return;
+		}
+			
 		
 		Node<T> tmp = current.getNext();
 		current.setNext(new Node<T>(data));
@@ -43,8 +46,12 @@ public class LinkedList<T> {
 	
 	
 	public void remove() {
-		if(current == head)
+		if(current == head) {
 			head = head.getNext();
+			current = head;
+		}
+			
+		
 		else {
 			Node<T> tmp = head;
 			while(tmp.getNext() != current)

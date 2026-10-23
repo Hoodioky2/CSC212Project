@@ -51,6 +51,11 @@ public class RideSharingSystem implements IRideSharingSystem {
 				String vehiclePlate = input.next();
 				String vehicleTypetext = input.next();
 				VehicleType type = VehicleType.valueOf(vehicleTypetext);
+				
+				if(drivers.findByVehiclePlate(vehiclePlate) != null) {
+					return false;
+				}
+				
 				drivers.add(new Driver(name, phoneNumber, id, vehiclePlate, type));
 			}
 			input.close();
@@ -65,6 +70,27 @@ public class RideSharingSystem implements IRideSharingSystem {
 		String[] t = timeStr.split("[/ :]");
 		return new DateTime(Integer.parseInt(t[2]), Integer.parseInt(t[0]), Integer.parseInt(t[1]),
 				Integer.parseInt(t[3]), Integer.parseInt(t[4]));
+	}
+	
+	
+	
+	private boolean hasTimeConflict(LinkedList<IRide> history, IDateTime newPickup, IDateTime newDropoff) {
+		if (history.empty()) {
+			return false;
+		}
+		history.findFirst();
+		while (true) {
+			if (newPickup.compareTo(history.retrieve().getDropoffTime()) < 0
+					&& history.retrieve().getPickupTime().compareTo(newDropoff) < 0) {
+				return true;
+			}
+
+			if (history.last()) {
+				break;
+			}
+			history.findNext();
+		}
+		return false;
 	}
 
 	@Override
@@ -210,6 +236,25 @@ public class RideSharingSystem implements IRideSharingSystem {
 	public LinkedList<IDriver> getAllDrivers() {
 		return drivers.getAll();
 	}
+	
+	
+	
+	private void removeRideFromDriverHistory(IRide ride, IDriver driver) {
+		
+		
+		driver.getRideHistory().findFirst();
+		
+		while(true) {
+			if(driver.getRideHistory().retrieve().getRideId() == ride.getRideId()) {
+				driver.getRideHistory().remove();
+				return;
+			}
+			if(driver.getRideHistory().last()) {
+				return;
+			}
+			driver.getRideHistory().findNext();
+		}
+	}
 
 	@Override
 	public boolean removeRider(int riderId) {
@@ -227,6 +272,7 @@ public class RideSharingSystem implements IRideSharingSystem {
 				// case 1 private ride
 				if (currentRide instanceof PrivateRide) {
 					rides.removeRideById(currentRide.getRideId());
+					removeRideFromDriverHistory(currentRide,currentRide.getDriver() );
 				}
 				// case 2 shared ride
 				else if (currentRide instanceof SharedRide) {
@@ -235,6 +281,7 @@ public class RideSharingSystem implements IRideSharingSystem {
 
 					if (sr.getParticipants().empty()) {
 						rides.removeRideById(sr.getRideId());
+						removeRideFromDriverHistory(currentRide, currentRide.getDriver());
 					}
 				}
 				// after procces the last ride exit the loop
@@ -265,32 +312,15 @@ public class RideSharingSystem implements IRideSharingSystem {
 				driverRides.findNext();
 			}
 			rides.removeRideById(driverRides.retrieve().getRideId());
-			drivers.removeById(driverId);
-			return true;
-
+			
 		}
-		return false;
+		drivers.removeById(driverId);
+		return true;
+
 
 	}
 
-	private boolean hasTimeConflict(LinkedList<IRide> history, IDateTime newPickup, IDateTime newDropoff) {
-		if (history.empty()) {
-			return false;
-		}
-		history.findFirst();
-		while (true) {
-			if (newPickup.compareTo(history.retrieve().getDropoffTime()) < 0
-					&& history.retrieve().getPickupTime().compareTo(newDropoff) < 0) {
-				return true;
-			}
-
-			if (history.last()) {
-				break;
-			}
-			history.findNext();
-		}
-		return false;
-	}
+	
 
 	@Override
 	public boolean schedulePrivateRide(String pickupLocation, IDateTime pickupTime, IDateTime dropoffTime,

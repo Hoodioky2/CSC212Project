@@ -24,9 +24,11 @@ public abstract class Person implements IPerson {
 	public void setPhoneNumber(String pn) {
 		String rgex = "[0-9]{10}";
 		if(pn.matches(rgex)) {
-			throw new IllegalArgumentException("Invalid phoneNumber");
+			phoneNumber = pn;
+			return;
 		}
-		phoneNumber = pn;
+		throw new IllegalArgumentException("Invalid phoneNumber");
+		
 	}
 	
 	@Override
