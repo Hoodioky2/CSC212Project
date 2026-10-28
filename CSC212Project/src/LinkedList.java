@@ -74,4 +74,25 @@ public class LinkedList<T> {
 	public boolean last() {
 		return current.getNext() == null;
 	}
+	
+	
+	
+	@Override
+	public String toString() {
+		String s1= "";
+		findFirst();
+		if(empty()) {
+			return s1;
+		}
+		while(true) {
+			s1 += String.format("%s%n",current.getData().toString());
+			
+			if(last()) {
+				break;
+			}
+			findNext();
+			
+		}
+		return s1;
+	}
 }

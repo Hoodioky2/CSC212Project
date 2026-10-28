@@ -141,6 +141,17 @@ public class RideList implements IRideList {
 	public int size() {
 		return rideCount;
 	}
+	
+	
+	@Override
+	public String toString() {
+		String s1 ="";
+		rides.findFirst();
+		for(int i =0; i<size(); i++) {
+			s1 += String.format("%s%n",rides.retrieve().toString());
+		}
+		return s1;
+	}
 		
 }
 

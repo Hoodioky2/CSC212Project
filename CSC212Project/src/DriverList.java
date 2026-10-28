@@ -22,8 +22,12 @@ public class DriverList implements IDriverList {
 		IDriver tmp;
 		while (true) {
 			
-			if(driver.compareTo(drivers.retrieve()) ==0)
+			if(driver.compareTo(drivers.retrieve()) ==0 
+					|| drivers.retrieve().getVehiclePlate().equals(driver.getVehiclePlate())) {
+				
 				return false;
+			}
+				
 
 			if (driver.compareTo(drivers.retrieve())< 0) {
 				tmp = drivers.retrieve();
@@ -239,6 +243,18 @@ public class DriverList implements IDriverList {
 	@Override
 	public int size() {
 		return driverCount;
+	}
+	
+	
+	@Override
+	public String toString() {
+		String s1 ="";
+		drivers.findFirst();
+		for(int i =0; i<size(); i++) {
+			s1 += String.format("%s%n", drivers.retrieve().toString());
+			drivers.findNext();
+		}
+		return s1;
 	}
 
 }

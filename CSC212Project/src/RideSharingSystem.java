@@ -21,7 +21,7 @@ public class RideSharingSystem implements IRideSharingSystem {
 			Scanner input = new Scanner(f);
 			input.useDelimiter(",|\\r?\\n");
 
-			while (input.hasNextLine()) {
+			while (input.hasNext()) {
 				int id = input.nextInt();
 				String name = input.next();
 				String email = input.next();
@@ -33,6 +33,7 @@ public class RideSharingSystem implements IRideSharingSystem {
 			input.close();
 			return true;
 		} catch (Exception e) {
+			e.printStackTrace();
 			return false;
 		}
 	}
@@ -44,7 +45,7 @@ public class RideSharingSystem implements IRideSharingSystem {
 			Scanner input = new Scanner(f);
 			input.useDelimiter(",|\\r?\\n");
 
-			while (input.hasNextLine()) {
+			while (input.hasNext()) {
 				int id = input.nextInt();
 				String name = input.next();
 				String phoneNumber = input.next();
@@ -342,10 +343,14 @@ public class RideSharingSystem implements IRideSharingSystem {
 		PrivateRide pr = new PrivateRide(rides.size() + 1, pickupLocation, dropoffLocation, pickupTime, dropoffTime,
 				driver, rider);
 
-		rides.addRide(pr);
-		driver.getRideHistory().insert(pr);
-		rider.getRideHistory().insert(pr);
-		return true;
+		if(rides.addRide(pr)) {
+			driver.getRideHistory().insert(pr);
+			rider.getRideHistory().insert(pr);
+			return true;
+		}
+		return false;
+		
+		
 
 	}
 
@@ -381,9 +386,12 @@ public class RideSharingSystem implements IRideSharingSystem {
 			sr.addParticipant(riders.findById(riderIds[i]));
 			riders.findById(riderIds[i]).getRideHistory().insert(sr);
 		}
-		driver.getRideHistory().insert(sr);
-		rides.addRide(sr);
-		return true;
+		if(rides.addRide(sr)) {
+			driver.getRideHistory().insert(sr);
+			return true;
+		}
+		return false;
+		
 
 	}
 

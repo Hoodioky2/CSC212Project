@@ -243,4 +243,18 @@ public class RiderList implements IRiderList {
 	public int size() {
 		return ridersCount;
 	}
+	
+	
+	
+	@Override
+	public String toString() {
+		String s1 ="";
+		
+		riders.findFirst();
+		for(int i=0; i<size(); i++) {
+			s1 += String.format("%s %n", riders.retrieve().toString());
+			riders.findNext();
+		}
+		return s1;
+	}
 }
