@@ -87,9 +87,9 @@ public class Main {
 				System.out.print("Enter the rider ID:");
 				int riderId = input.nextInt();
 				input.nextLine();
-				System.out.print("Enter the email");
+				System.out.print("Enter the email: ");
 				String email = input.nextLine();
-				System.out.print("Enter the home city");
+				System.out.print("Enter the home city: ");
 				String homeCity = input.nextLine();
 
 				IRider rider;
