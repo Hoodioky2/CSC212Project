@@ -6,13 +6,15 @@ public class Main {
 		Scanner input = new Scanner(System.in);
 
 		RideSharingSystem system = new RideSharingSystem();
+		//loads the initial riders, drivers , rides into the system
 		system.loadDriversFromCSV("drivers_30.csv");
 		system.loadRidersFromCSV("riders_100.csv");
 		system.loadRidesFromCSV("rides_40.csv");
 
 		int userSelection;
 		boolean turnof = false;
-
+		
+		// keeps displaying the menu until the user choose to exit
 		do {
 
 			System.out.println("1. List all riders");
@@ -27,10 +29,11 @@ public class Main {
 			System.out.println("10.Search for rides by rider name");
 			System.out.println("11.List the participants of a shared ride by pickup location");
 			System.out.println("12.Add a ride");
-			System.out.println("0. Exit");
+			System.out.println("0.Exit");
 			System.out.println(
 					"=============================================================================================");
 			System.out.print("Chose your operation: ");
+			//handles invalids menu selections
 			try {
 				userSelection = input.nextInt();
 				input.nextLine();
@@ -39,7 +42,7 @@ public class Main {
 				userSelection = -1;
 				input.nextLine();
 			}
-			
+			// executes the operation selected by the user
 			switch (userSelection) {
 			case 1:
 				if (system.getAllRiders().empty()) {
@@ -73,9 +76,10 @@ public class Main {
 				}
 
 				break;
-
+			
 			case 4:
-
+				
+				// collects the rider information and validates it before adding
 				System.out.print("Enter the rider name: ");
 				name = input.nextLine();
 				System.out.print("Enter the phone number: ");
@@ -94,7 +98,7 @@ public class Main {
 					if (system.addRider(rider)) {
 						System.out.println("Rider added successfully");
 					} else {
-						System.out.println("there is another rider with the same ID");
+						System.out.println("there is another rider with the same ID or Email");
 					}
 				} catch (IllegalArgumentException e) {
 					System.out.println("Invalid phone number");
@@ -113,7 +117,7 @@ public class Main {
 				break;
 
 			case 6:
-				System.out.print("Enter the vehicle type:");
+				System.out.print("Enter the vehicle type(SEDAN,LUXURY_SEDAN,VAN,SUV):");
 				String vehicleTypeStr = input.nextLine();
 				try {
 					VehicleType vehicleType = VehicleType.valueOf(vehicleTypeStr);
@@ -131,6 +135,10 @@ public class Main {
 				break;
 
 			case 7:
+				/*
+				 * collects the driver information
+				 * and validates the vehicle type and plate
+				 */
 				System.out.print("Enter driver name: ");
 				name = input.nextLine();
 
@@ -188,7 +196,7 @@ public class Main {
 				break;
 
 			case 10:
-				System.out.print("Enter rider name");
+				System.out.print("Enter rider name: ");
 				name = input.nextLine();
 
 				LinkedList<IRide> rideByriderName = system.searchRidesByRiderName(name);
@@ -200,36 +208,24 @@ public class Main {
 				break;
 
 			case 11:
-				System.out.print("Enter the ride name:");
+				System.out.print("Enter the pickup location:");
 				pickupLocation = input.nextLine();
-				LinkedList<IRide> rides = system.searchRidesByPickupLocation(pickupLocation);
+				LinkedList<IRider> participants = system.getSharedRideParticipants(pickupLocation);
 
-				if (rides.empty()) {
+				if (participants.empty()) {
 					System.out.println("There is no rides with the name you entered");
 				}
 				else {
-					rides.findFirst();
-					while (true) {
-						if (rides.retrieve() instanceof SharedRide) {
-							System.out.println(((SharedRide) (rides.retrieve())).getParticipants());
-						}
-						if (rides.last()) {
-							break;
-						}
-						rides.findNext();
-					}
-					
+					System.out.println(participants);
 				}
 
 				break;
-
+				
 			case 12:
+				
+				// schedules a private or shared ride based on the user's selection
 				System.out.print("Do you want to add private or shared ride? :  ");
 				String rideType = input.nextLine();
-
-				System.out.print("Enter ride ID:");
-				int rideId = input.nextInt();
-				input.nextLine();
 
 				System.out.print("Enter pickup location: ");
 				pickupLocation = input.nextLine();
@@ -237,7 +233,7 @@ public class Main {
 				System.out.print("Enter dropoff location: ");
 				String dropoffLocation = input.nextLine();
 
-				System.out.print("Enter pickup time by the order Y\\M\\D  H:Min");
+				System.out.print("Enter pickup time by the order Y\\M\\D  H:Min: ");
 				int year = input.nextInt();
 				int month = input.nextInt();
 				int day = input.nextInt();
@@ -246,7 +242,7 @@ public class Main {
 				input.nextLine();
 				DateTime pickupTime = new DateTime(year, month, day, hour, minute);
 
-				System.out.print("Enter dropoff time by the order Y\\M\\D  H:Min");
+				System.out.print("Enter dropoff time by the order Y\\M\\D  H:Min: ");
 				year = input.nextInt();
 				month = input.nextInt();
 				day = input.nextInt();

@@ -9,7 +9,10 @@ public class RideList implements IRideList {
 	}
 	
 	
-
+	/*
+	 * inserts rides in alphabetical order by pickup location
+	 * worst case O(n)
+	 */
 	@Override
 	public boolean addRide(IRide ride) {
 		if (rides.empty()) {
@@ -46,6 +49,7 @@ public class RideList implements IRideList {
 	
 	
 	@Override
+	// remove a ride using its ID
 	public boolean removeRideById(int rideId) {
 		if(rides.empty())
 			return false;
@@ -74,7 +78,7 @@ public class RideList implements IRideList {
 	}
 	
 	
-
+	// returns all rides matching the specified pickup location
 	@Override
 	public LinkedList<IRide> findByPickupLocation(String pickupLocation) {
 		LinkedList<IRide> res = new LinkedList<IRide>();
@@ -93,7 +97,7 @@ public class RideList implements IRideList {
 	}
 	
 	
-	
+	//searches both private and shared rides for specified rider
 	@Override
 	public LinkedList<IRide> findByRiderName(String riderFullName){
 		LinkedList<IRide> res = new LinkedList<IRide>();
@@ -148,12 +152,12 @@ public class RideList implements IRideList {
 	
 	@Override
 	public String toString() {
-		String s1 ="";
+		StringBuilder s1 =new StringBuilder();
 		rides.findFirst();
 		for(int i =0; i<size(); i++) {
-			s1 += String.format("%s%n",rides.retrieve().toString());
+			s1.append(rides.retrieve().toString() + "\n");
 		}
-		return s1;
+		return s1.toString();
 	}
 		
 }

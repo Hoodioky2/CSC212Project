@@ -79,7 +79,7 @@ public class SharedRide extends Ride implements ISharedRide {
 	
 	public String toString() {
 		
-		return String.format("%s      RideType:%s",this.toString(), "Shared" );
+		return String.format("%s      RideType:%s",super.toString(), "Shared" );
 		
 		
 	}

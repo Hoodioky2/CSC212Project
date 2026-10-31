@@ -10,7 +10,13 @@ public class Driver extends Person implements IDriver {
 		setVehiclePlate(vehiclePlate);
 		this.vehicleType = vehicleType;
 	}
-
+	
+	
+	/*
+	 * Validates that the plate contains 3 uppercase letters
+	 * and followed by 4 digits
+	 */
+	
 	@Override
 	public void setVehiclePlate(String vp) {
 		String rgex = "[A-Z]{3}[0-9]{4}";

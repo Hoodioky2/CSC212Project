@@ -9,21 +9,33 @@ public class RiderList implements IRiderList {
 	}
 
 	@Override
-	// worst case O(n)
+	/*
+	 * add a rider in sorted order by ID
+	 * and checks for duplicates
+	 * worst case O(n)
+	 */
 	public boolean add(IRider rider)  {
-		if (riders.empty()) { //1
+		if (riders.empty()) { 
 			riders.insert(rider);
 			ridersCount++;
 			return true;
 		}
-		riders.findFirst(); //1 
+		
+		if(this.findByEmail(rider.getEmail())!= null) {
+			return false;
+		}
+		
+		riders.findFirst();  
 		IRider tmp; 
 		while (true) {
+			tmp =riders.retrieve();
 			
-			if(rider.compareTo(riders.retrieve()) ==0)//2n
+			
+			
+			if(rider.compareTo(tmp) ==0)
 				return false;
 
-			if (rider.compareTo(riders.retrieve())< 0) {//n
+			if (rider.compareTo(tmp)< 0) {
 				tmp = riders.retrieve();
 				riders.update(rider);
 				riders.insert(tmp);
@@ -31,18 +43,20 @@ public class RiderList implements IRiderList {
 				return true;
 			}
 			
-			if(riders.last()) {//n
+			
+			
+			if(riders.last()) {
 				riders.insert(rider);
 				ridersCount++;
 				return true;
 			}
-			riders.findNext(); // n-1
+			riders.findNext(); 
 		}
 	}
 	
 	
 	
-	
+	// searches for a rider using thier ID
 	@Override
 	public IRider findById(int riderId) {
 		if(riders.empty())
@@ -64,7 +78,7 @@ public class RiderList implements IRiderList {
 	
 	
 	
-	
+	// returns all riders with matching full name
 	@Override
 	public LinkedList<IRider> findByName(String fullName){
 		LinkedList<IRider> res = new LinkedList<IRider>();
@@ -85,6 +99,7 @@ public class RiderList implements IRiderList {
 	}
 	
 	
+	// searches for a rider using email
 	@Override
 	public IRider findByEmail(String email) {
 		if(riders.empty())
@@ -104,7 +119,7 @@ public class RiderList implements IRiderList {
 	
 	
 	
-	
+	//retuens all riders have the same home city
 	@Override
 	public LinkedList<IRider> findByHomeCity(String homeCity){
 		LinkedList<IRider> res = new LinkedList<IRider>();
@@ -133,7 +148,7 @@ public class RiderList implements IRiderList {
 	
 	
 	
-
+	//remove a singel rider by his ID
 	@Override
 	public boolean removeById(int riderId) {
 		if(riders.empty())
@@ -159,7 +174,7 @@ public class RiderList implements IRiderList {
 	
 	
 	
-
+	// remove a singel rider by his email
 	@Override
 	public boolean removeByEmail(String email) {
 		if(riders.empty())
@@ -186,7 +201,10 @@ public class RiderList implements IRiderList {
 	
 	
 	
-
+	/*
+	 * remove all riders matching the given name
+	 * returns the number of removed riders
+	 */
 	@Override
 	public int removeByName(String fullName) {
 		if(riders.empty())
@@ -213,7 +231,10 @@ public class RiderList implements IRiderList {
 	
 	
 	
-
+	/*
+	 * remove all riders from specified home city
+	 * returns the number of riders removed
+	 */
 	@Override
 	public int removeByHomeCity(String homeCity) {
 		if(riders.empty())
@@ -249,13 +270,13 @@ public class RiderList implements IRiderList {
 	
 	@Override
 	public String toString() {
-		String s1 ="";
+		StringBuilder s1 =new StringBuilder();
 		
 		riders.findFirst();
 		for(int i=0; i<size(); i++) {
-			s1 += String.format("%s %n", riders.retrieve().toString());
+			s1.append(riders.retrieve().toString()+ "\n");
 			riders.findNext();
 		}
-		return s1;
+		return s1.toString();
 	}
 }

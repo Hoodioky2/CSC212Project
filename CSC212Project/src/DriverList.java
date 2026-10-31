@@ -10,7 +10,11 @@ public class DriverList implements IDriverList {
 	}
 	
 	
-	
+	/*
+	 * inserts  drivers in sorted order by ID
+	 * while checks for duplicates
+	 * worst case O(n)
+	 */
 	@Override
 	public boolean add(IDriver driver) {
 		if (drivers.empty()) {
@@ -18,19 +22,25 @@ public class DriverList implements IDriverList {
 			driverCount++;
 			return true;
 		}
+		
+		if(this.findByVehiclePlate(driver.getVehiclePlate()) != null) {
+			return false;
+		}
+		
 		drivers.findFirst();
 		IDriver tmp;
 		while (true) {
+			tmp = drivers.retrieve();
 			
-			if(driver.compareTo(drivers.retrieve()) ==0 
-					|| drivers.retrieve().getVehiclePlate().equals(driver.getVehiclePlate())) {
+			if(driver.compareTo(tmp) ==0 
+					|| tmp.equals(driver.getVehiclePlate())) {
 				
 				return false;
 			}
 				
 
-			if (driver.compareTo(drivers.retrieve())< 0) {
-				tmp = drivers.retrieve();
+			if (driver.compareTo(tmp)< 0) {
+				
 				drivers.update(driver);
 				drivers.insert(tmp);
 				driverCount++;
@@ -48,7 +58,7 @@ public class DriverList implements IDriverList {
 	
 	
 	
-	
+	// returns the driver with the same unique ID
 	@Override
 	public IDriver findById(int driverId) {
 		if(drivers.empty())
@@ -69,7 +79,7 @@ public class DriverList implements IDriverList {
 	
 	
 	
-	
+	// seaarch for all drivers with am exact matching name
 	@Override
 	public LinkedList<IDriver> findByName(String fullName){
 		if(drivers.empty())
@@ -92,7 +102,7 @@ public class DriverList implements IDriverList {
 	
 	
 	
-	
+	// retuens singel driver with the unique vehicle plate
 	@Override
 	public IDriver findByVehiclePlate(String vehiclePlate) {
 		if(drivers.empty())
@@ -112,7 +122,7 @@ public class DriverList implements IDriverList {
 	
 	
 	
-	
+	// returns all drivers with the specified vehicle type
 	@Override
 	public LinkedList<IDriver> findByVehicleType(VehicleType vehicleType){
 		LinkedList<IDriver> res = new LinkedList<IDriver>();
@@ -137,7 +147,7 @@ public class DriverList implements IDriverList {
 	}
 	
 	
-	
+	// remove a singel driver with the specified ID
 	@Override
 	public boolean removeById(int driverId) {
 		if(drivers.empty())
@@ -162,7 +172,7 @@ public class DriverList implements IDriverList {
 	}
 	
 	
-	
+	// remove a singel driver using specified vehicle plate
 	@Override
 	public boolean removeByVehiclePlate(String vehiclePlate) {
 		if(drivers.empty())
@@ -187,6 +197,10 @@ public class DriverList implements IDriverList {
 	}
 	
 	
+	/*
+	 *  removes all drivers with the specified name
+	 *  and returns thier number
+	 */
 	
 	@Override
 	public int removeByName(String fullName) {
@@ -213,7 +227,10 @@ public class DriverList implements IDriverList {
 	
 	
 	
-	
+	/*
+	 * removes all drivers with the specified vehicle type
+	 * and returns thier number
+	 */
 	@Override 
 	public int removeByVehicleType(VehicleType vehicleType) {
 		int count = 0;
@@ -248,13 +265,13 @@ public class DriverList implements IDriverList {
 	
 	@Override
 	public String toString() {
-		String s1 ="";
+		StringBuilder s1 =new StringBuilder();
 		drivers.findFirst();
 		for(int i =0; i<size(); i++) {
-			s1 += String.format("%s%n", drivers.retrieve().toString());
+			s1.append(drivers.retrieve().toString()+ "\n");
 			drivers.findNext();
 		}
-		return s1;
+		return s1.toString();
 	}
 
 }

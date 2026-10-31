@@ -12,7 +12,8 @@ public class RideSharingSystem implements IRideSharingSystem {
 		rides = new RideList();
 
 	}
-
+	
+	// loafd rider records from a csv file
 	@Override
 	public boolean loadRidersFromCSV(String ridersFilePath) {
 
@@ -27,7 +28,9 @@ public class RideSharingSystem implements IRideSharingSystem {
 				String email = input.next();
 				String phoneNumber = input.next();
 				String homeCity = input.next();
-				riders.add(new Rider(name, phoneNumber, id, email, homeCity));
+				IRider rider =new Rider(name, phoneNumber, id, email, homeCity);
+				
+				riders.add(rider);
 
 			}
 			input.close();
@@ -37,7 +40,8 @@ public class RideSharingSystem implements IRideSharingSystem {
 			return false;
 		}
 	}
-
+	
+	// loads driver records from a csv file
 	@Override
 	public boolean loadDriversFromCSV(String driversFilePath) {
 		try {
@@ -53,11 +57,9 @@ public class RideSharingSystem implements IRideSharingSystem {
 				String vehicleTypetext = input.next();
 				VehicleType type = VehicleType.valueOf(vehicleTypetext);
 				
-				if(drivers.findByVehiclePlate(vehiclePlate) != null) {
-					return false;
-				}
+				IDriver driver = new Driver(name, phoneNumber, id, vehiclePlate, type);
 				
-				drivers.add(new Driver(name, phoneNumber, id, vehiclePlate, type));
+				drivers.add(driver);
 			}
 			input.close();
 			return true;
@@ -66,7 +68,9 @@ public class RideSharingSystem implements IRideSharingSystem {
 			return false;
 		}
 	}
-
+	/*
+	 * helper method converts a date time string into a DateTime object
+	 */
 	private IDateTime parseDateTime(String timeStr) {
 		String[] t = timeStr.split("[/ :]");
 		return new DateTime(Integer.parseInt(t[2]), Integer.parseInt(t[0]), Integer.parseInt(t[1]),
@@ -74,7 +78,7 @@ public class RideSharingSystem implements IRideSharingSystem {
 	}
 	
 	
-	
+	//helper method checks whether a new ride overlaps with any existing ride
 	private boolean hasTimeConflict(LinkedList<IRide> history, IDateTime newPickup, IDateTime newDropoff) {
 		if (history.empty()) {
 			return false;
@@ -93,7 +97,10 @@ public class RideSharingSystem implements IRideSharingSystem {
 		}
 		return false;
 	}
-
+	/*
+	 * loads private and shared rides 
+	 * while cheaking rider and driver availabilty
+	 */
 	@Override
 	public boolean loadRidesFromCSV(String ridesFilePath) {
 
@@ -239,7 +246,7 @@ public class RideSharingSystem implements IRideSharingSystem {
 	}
 	
 	
-	
+	// removes a specific ride from the assigend driver's history
 	private void removeRideFromDriverHistory(IRide ride, IDriver driver) {
 		
 		if(driver.getRideHistory().empty()) {
@@ -259,6 +266,10 @@ public class RideSharingSystem implements IRideSharingSystem {
 		}
 	}
 
+	/*
+	 * remove a rider and thier private rides
+	 * remove them from shared rides and delete empty shared rides
+	 */
 	@Override
 	public boolean removeRider(int riderId) {
 		if (riders.findById(riderId) == null) {
@@ -301,6 +312,7 @@ public class RideSharingSystem implements IRideSharingSystem {
 
 	}
 
+	//remove driver and all rides assigend to them
 	@Override
 	public boolean removeDriver(int driverId) {
 		if (drivers.findById(driverId) == null) {
@@ -325,6 +337,10 @@ public class RideSharingSystem implements IRideSharingSystem {
 
 	
 
+	/*
+	 *  validated all participants
+	 *  and schedules a shared ride without conflicts 
+	 */
 	@Override
 	public boolean schedulePrivateRide(String pickupLocation, IDateTime pickupTime, IDateTime dropoffTime,
 			String dropoffLocation, int riderId, int driverId) {
@@ -354,6 +370,7 @@ public class RideSharingSystem implements IRideSharingSystem {
 
 	}
 
+	//schedules a private ride after checking existance and time conflict
 	@Override
 	public boolean scheduleSharedRide(String pickupLocation, IDateTime pickupTime, IDateTime dropoffTime,
 			String dropoffLocation, int[] riderIds, int driverId) {
@@ -407,6 +424,7 @@ public class RideSharingSystem implements IRideSharingSystem {
 		return rides.findByRiderName(riderName);
 	}
 
+	// returns participants from shared rides matching the pickup location
 	@Override
 	public LinkedList<IRider> getSharedRideParticipants(String pickupLocation) {
 		LinkedList<IRider> res = new LinkedList<IRider>();

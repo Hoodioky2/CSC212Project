@@ -20,9 +20,11 @@ public abstract class Person implements IPerson {
 		return name;
 	}
 	
+	
+	//validate that the phone number have exactly 10 digits
 	@Override
 	public void setPhoneNumber(String pn) {
-		String rgex = "[0-9]{10}";
+		String rgex = "[0-9]{10}"; 
 		if(pn.matches(rgex)) {
 			phoneNumber = pn;
 			return;
