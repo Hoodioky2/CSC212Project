@@ -31,7 +31,7 @@ public class PrivateRide extends Ride implements IPrivateRide {
 	
 	
 	public String toString() {
-		return String.format("%s      RideType:%s",this.toString(), "Private" );
+		return String.format("%s      RideType:%s",super.toString(), "Private" );
 	}
 	
 
