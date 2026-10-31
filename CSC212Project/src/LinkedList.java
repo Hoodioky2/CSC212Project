@@ -78,13 +78,13 @@ public class LinkedList<T> {
 	
 	@Override
 	public String toString() {
-		String s1= "";
+		StringBuilder s1= new StringBuilder();
 		findFirst();
 		if(empty()) {
-			return s1;
+			return "";
 		}
 		while(true) {
-			s1 += String.format("%s%n",current.getData().toString());
+			s1.append(current.getData().toString()+"\n");
 			
 			if(last()) {
 				break;
@@ -92,6 +92,6 @@ public class LinkedList<T> {
 			findNext();
 			
 		}
-		return s1;
+		return s1.toString();
 	}
 }
