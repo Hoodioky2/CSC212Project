@@ -75,5 +75,13 @@ public class SharedRide extends Ride implements ISharedRide {
 	public boolean isEmpty() {
 		return participants.empty();
 	}
+	
+	
+	public String toString() {
+		
+		return String.format("%s      RideType:%s",this.toString(), "Shared" );
+		
+		
+	}
 
 }

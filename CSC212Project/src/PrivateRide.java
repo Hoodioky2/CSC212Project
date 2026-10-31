@@ -29,5 +29,10 @@ public class PrivateRide extends Ride implements IPrivateRide {
 		return this.rider != null && this.rider.getId() == riderId;
 	}
 	
+	
+	public String toString() {
+		return String.format("%s      RideType:%s",this.toString(), "Private" );
+	}
+	
 
 }

@@ -9,20 +9,21 @@ public class RiderList implements IRiderList {
 	}
 
 	@Override
-	public boolean add(IRider rider) {
-		if (riders.empty()) {
+	// worst case O(n)
+	public boolean add(IRider rider)  {
+		if (riders.empty()) { //1
 			riders.insert(rider);
 			ridersCount++;
 			return true;
 		}
-		riders.findFirst();
-		IRider tmp;
+		riders.findFirst(); //1 
+		IRider tmp; 
 		while (true) {
 			
-			if(rider.compareTo(riders.retrieve()) ==0)
+			if(rider.compareTo(riders.retrieve()) ==0)//2n
 				return false;
 
-			if (rider.compareTo(riders.retrieve())< 0) {
+			if (rider.compareTo(riders.retrieve())< 0) {//n
 				tmp = riders.retrieve();
 				riders.update(rider);
 				riders.insert(tmp);
@@ -30,12 +31,12 @@ public class RiderList implements IRiderList {
 				return true;
 			}
 			
-			if(riders.last()) {
+			if(riders.last()) {//n
 				riders.insert(rider);
 				ridersCount++;
 				return true;
 			}
-			riders.findNext();
+			riders.findNext(); // n-1
 		}
 	}
 	

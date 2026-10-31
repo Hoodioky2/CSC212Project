@@ -31,9 +31,15 @@ public class Main {
 			System.out.println(
 					"=============================================================================================");
 			System.out.print("Chose your operation: ");
-
-			userSelection = input.nextInt();
-			input.nextLine();
+			try {
+				userSelection = input.nextInt();
+				input.nextLine();
+				
+			}catch(Exception e) {
+				userSelection = -1;
+				input.nextLine();
+			}
+			
 			switch (userSelection) {
 			case 1:
 				if (system.getAllRiders().empty()) {
@@ -82,8 +88,9 @@ public class Main {
 				System.out.print("Enter the home city");
 				String homeCity = input.nextLine();
 
-				IRider rider = new Rider(name, phoneNumber, riderId, email, homeCity);
+				IRider rider;
 				try {
+					 rider = new Rider(name, phoneNumber, riderId, email, homeCity);
 					if (system.addRider(rider)) {
 						System.out.println("Rider added successfully");
 					} else {
@@ -151,7 +158,7 @@ public class Main {
 					}
 
 				} catch (IllegalArgumentException e) {
-					System.out.println("Invalid vehicle type");
+					System.out.println("Invalid vehicle plate or phone number");
 				}
 
 				break;
@@ -200,15 +207,18 @@ public class Main {
 				if (rides.empty()) {
 					System.out.println("There is no rides with the name you entered");
 				}
-				rides.findFirst();
-				while (true) {
-					if (rides.retrieve() instanceof SharedRide) {
-						System.out.println(((SharedRide) (rides.retrieve())).getParticipants());
+				else {
+					rides.findFirst();
+					while (true) {
+						if (rides.retrieve() instanceof SharedRide) {
+							System.out.println(((SharedRide) (rides.retrieve())).getParticipants());
+						}
+						if (rides.last()) {
+							break;
+						}
+						rides.findNext();
 					}
-					if (rides.last()) {
-						break;
-					}
-					rides.findNext();
+					
 				}
 
 				break;
@@ -248,7 +258,7 @@ public class Main {
 				System.out.print("Enter driver ID: ");
 				driverId = input.nextInt();
 				input.nextLine();
-				IDriver driver = system.searchDriverById(driverId);
+				
 
 				if (rideType.trim().toLowerCase().equalsIgnoreCase("private")) {
 					System.out.print("Enter rider ID: ");
@@ -306,6 +316,8 @@ public class Main {
 			System.out.println(
 					"=============================================================================================");
 		} while (!turnof);
+		
+		input.close();
 
 	}
 

@@ -382,14 +382,16 @@ public class RideSharingSystem implements IRideSharingSystem {
 		}
 		SharedRide sr = new SharedRide(rides.size() + 1, pickupLocation, dropoffLocation, pickupTime, dropoffTime,
 				driver);
-		for (int i = 0; i < riderIds.length; i++) {
-			sr.addParticipant(riders.findById(riderIds[i]));
-			riders.findById(riderIds[i]).getRideHistory().insert(sr);
-		}
 		if(rides.addRide(sr)) {
 			driver.getRideHistory().insert(sr);
+			for (int i = 0; i < riderIds.length; i++) {
+				sr.addParticipant(riders.findById(riderIds[i]));
+				riders.findById(riderIds[i]).getRideHistory().insert(sr);
+			}
 			return true;
 		}
+		
+		
 		return false;
 		
 

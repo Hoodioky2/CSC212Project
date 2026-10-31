@@ -24,6 +24,7 @@ public class RideList implements IRideList {
 			if(ride.compareTo(rides.retrieve()) ==0) {
 				return false;
 			}
+			
 			if (ride.compareTo(rides.retrieve()) < 0) {
 				IRide tmp = rides.retrieve();
 				rides.update(ride);
@@ -31,6 +32,8 @@ public class RideList implements IRideList {
 				rideCount++;
 				return true;
 			}
+			
+			
 			if (rides.last()) {
 				rides.insert(ride);
 				rideCount++;

@@ -55,7 +55,7 @@ public class Driver extends Person implements IDriver {
 	@Override
 	public String toString() {
 
-		return String.format("%s	Plates: %s	VehicleType: %s", 
+		return String.format("%s	Plates: %s		VehicleType: %s", 
 				super.toString(), vehiclePlate, vehicleType);
 	}
 
